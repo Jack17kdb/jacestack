@@ -1,0 +1,6 @@
+@import "tailwindcss";
+
+/* Brevo overrides */
+.sib-form-message-panel { display: none; }
+.sib-form { background: transparent !important; }
+.sib-container--large, .sib-container--vertical { background: transparent !important; border: none !important; max-width: 100% !important; }
