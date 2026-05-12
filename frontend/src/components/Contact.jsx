@@ -4,7 +4,6 @@ import axios from 'axios';
 const BREVO_KEY = import.meta.env.VITE_BREVO_API_KEY;
 const FROM_EMAIL = import.meta.env.VITE_EMAIL_ADDRESS;
 
-// Rate limit: track submissions in sessionStorage to deter abuse
 const getRateData = () => {
 	try {
 		return JSON.parse(sessionStorage.getItem('_crl') || '{"count":0,"ts":0}');
@@ -13,8 +12,8 @@ const getRateData = () => {
 const setRateData = (d) => sessionStorage.setItem('_crl', JSON.stringify(d));
 
 const Contact = () => {
-	const [form, setForm] = useState({ name: '', email: '', projectDescription: '', budgetTimeline: '' });
-	const [status, setStatus] = useState(null); // null | 'sending' | 'ok' | 'err' | 'rate'
+	const [form, setForm] = useState({ name: '', email: '', message: '', projectDescription: '', budgetTimeline: '' });
+	const [status, setStatus] = useState(null);
 	const set = (k, v) => setForm(f => ({ ...f, [k]: v }));
 
 	const sanitize = (str) => str.replace(/<[^>]*>/g, '').trim().slice(0, 2000);
@@ -22,16 +21,14 @@ const Contact = () => {
 	const handleSubmit = async (e) => {
 		e.preventDefault();
 
-		// Client-side rate limit: max 3 submissions per session
 		const rd = getRateData();
 		if (rd.count >= 3) { setStatus('rate'); return; }
 
-		// Basic validation
 		const name = sanitize(form.name);
 		const email = sanitize(form.email);
-		const message = sanitize(form.message);
-		const message = sanitize(form.projectDescription);
-		if (!name || !email || !message) return;
+		const userMessage = sanitize(form.message);
+		const projectDescription = sanitize(form.projectDescription);
+		if (!name || !email || !userMessage || !projectDescription) return;
 		if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return;
 
 		setStatus('sending');
@@ -43,7 +40,7 @@ const Contact = () => {
 					to: [{ email: 'jacestack17@gmail.com', name: 'Jace' }],
 					replyTo: { email: email, name: name },
 					subject: `New message from ${name} via JaceStack AI`,
-					htmlContent: `<div style="font-family:sans-serif;color:#333;max-width:600px;padding:24px"><h2 style="margin:0 0 16px">New Project Brief</h2><p><strong>Name:</strong> ${name}</p><p><strong>Email:</strong> <a href="mailto:${email}">${email}</a></p><hr style="border:none;border-top:1px solid #eee;margin:20px 0"/><p><strong>Project Description:</strong></p><p style="line-height:1.7;white-space:pre-wrap">${sanitize(form.projectDescription).replace(/\n/g,'<br/>')}</p><p><strong>Budget / Timeline:</strong> ${sanitize(form.budgetTimeline) || 'Not specified'}</p></div>`,
+					htmlContent: `<div style="font-family:sans-serif;color:#333;max-width:600px;padding:24px"><h2 style="margin:0 0 16px">New Project Brief</h2><p><strong>Name:</strong> ${name}</p><p><strong>Email:</strong> <a href="mailto:${email}">${email}</a></p><hr style="border:none;border-top:1px solid #eee;margin:20px 0"/><p><strong>Project Description:</strong></p><p style="line-height:1.7;white-space:pre-wrap">${projectDescription.replace(/\n/g,'<br/>')}</p><p><strong>Budget / Timeline:</strong> ${sanitize(form.budgetTimeline) || 'Not specified'}</p></div>`,
 				},
 				{
 					headers: {
@@ -55,7 +52,7 @@ const Contact = () => {
 			);
 			setRateData({ count: rd.count + 1, ts: Date.now() });
 			setStatus('ok');
-			setForm({ name: '', email: '', projectDescription: '', budgetTimeline: '' });
+			setForm({ name: '', email: '', message: '', projectDescription: '', budgetTimeline: '' });
 		} catch (err) {
 			console.error(err?.response?.data || err.message);
 			setStatus('err');
