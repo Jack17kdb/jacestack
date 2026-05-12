@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { Gift, FileText, Video, Bot, Github, FileDown } from 'lucide-react';
+import { Gift, FileText, Video, Bot, FileDown } from 'lucide-react';
+import { FaGithub } from "react-icons/fa";
 
 const GITHUB_URL = 'GITHUB_REPO_PLACEHOLDER';
 const PDF_URL = 'PDF_DOWNLOAD_PLACEHOLDER';
@@ -73,7 +74,7 @@ const Subscribe = () => {
 								rel="noopener noreferrer"
 								className="inline-flex items-center gap-2 px-5 py-3 rounded-xl border border-white/10 bg-white/[0.03] hover:bg-white hover:text-black transition text-sm font-medium"
 							>
-								<Github size={16} />
+								<FaGithub size={16} />
 								View on GitHub
 							</a>
 							<a
