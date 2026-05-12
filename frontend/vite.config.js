@@ -4,6 +4,13 @@ import tailwindcss from '@tailwindcss/vite';
 
 export default defineConfig({
   plugins: [react(), tailwindcss()],
+
+  preview: {
+    allowedHosts: ['jacestack.onrender.com'],
+    port: 10000,
+    host: '0.0.0.0',
+  },
+
   build: {
     rollupOptions: {
       output: {
