@@ -21,12 +21,11 @@ const sendWelcomeEmail = async (toEmail) => {
           <ul style="color:#d1d5db;font-size:14px;line-height:1.8;margin:0;padding-left:20px;">
             <li>Full RAG chatbot source code (LangGraph + Groq + React)</li>
             <li>PDF guide covering development, deployment, and showcasing</li>
-            <li>Exclusive walkthrough video</li>
           </ul>
         </div>
         <div style="margin-bottom:32px;">
           <a href="https://github.com/Jack17kdb/ai-smart-chatbot" style="display:inline-block;background:#fff;color:#000;padding:14px 24px;border-radius:10px;font-weight:600;font-size:14px;text-decoration:none;margin-right:12px;">View GitHub Repo</a>
-          <a href="PDF_DOWNLOAD_PLACEHOLDER" style="display:inline-block;background:transparent;color:#fff;padding:14px 24px;border-radius:10px;font-weight:600;font-size:14px;text-decoration:none;border:1px solid rgba(255,255,255,0.15);">Download PDF Guide</a>
+          <a href="https://drive.google.com/file/d/1muQ73j7vHJWnjCcViZeU3kPdQGp8NNVz/view?usp=sharing" style="display:inline-block;background:transparent;color:#fff;padding:14px 24px;border-radius:10px;font-weight:600;font-size:14px;text-decoration:none;border:1px solid rgba(255,255,255,0.15);">Download PDF Guide</a>
         </div>
         <p style="color:#6b7280;font-size:13px;line-height:1.7;">This kit has been used in real client projects including Sentinel AI, Multi-Agent Financial Systems, and real-time platforms in Kenya and beyond. Reply anytime if you want to talk about applying it to your own project.</p>
         <hr style="border:none;border-top:1px solid rgba(255,255,255,0.08);margin:32px 0;" />

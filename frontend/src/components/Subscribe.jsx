@@ -2,8 +2,8 @@ import { useState } from 'react';
 import { Gift, FileText, Video, Bot, FileDown } from 'lucide-react';
 import { FaGithub } from "react-icons/fa";
 
-const GITHUB_URL = 'GITHUB_REPO_PLACEHOLDER';
-const PDF_URL = 'PDF_DOWNLOAD_PLACEHOLDER';
+const GITHUB_URL = 'https://github.com/Jack17kdb/ai-smart-chatbot';
+const PDF_URL = 'https://drive.google.com/file/d/1muQ73j7vHJWnjCcViZeU3kPdQGp8NNVz/view?usp=sharing';
 
 const perks = [
 	{ icon: <Bot size={18} className="text-purple-400" />, label: 'AI Smart Chatbot — full source code (RAG + LangGraph + Groq + React)' },
