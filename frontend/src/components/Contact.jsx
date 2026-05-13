@@ -4,13 +4,6 @@ import axios from 'axios';
 const BREVO_KEY = import.meta.env.VITE_BREVO_API_KEY;
 const FROM_EMAIL = import.meta.env.VITE_EMAIL_ADDRESS;
 
-const getRateData = () => {
-	try {
-		return JSON.parse(sessionStorage.getItem('_crl') || '{"count":0,"ts":0}');
-	} catch { return { count: 0, ts: 0 }; }
-};
-const setRateData = (d) => sessionStorage.setItem('_crl', JSON.stringify(d));
-
 const Contact = () => {
 	const [form, setForm] = useState({ name: '', email: '', message: '', projectDescription: '', budgetTimeline: '' });
 	const [status, setStatus] = useState(null);
@@ -20,9 +13,6 @@ const Contact = () => {
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();
-
-		const rd = getRateData();
-		if (rd.count >= 3) { setStatus('rate'); return; }
 
 		const name = sanitize(form.name);
 		const email = sanitize(form.email);
@@ -40,7 +30,7 @@ const Contact = () => {
 					to: [{ email: 'jacestack17@gmail.com', name: 'Jace' }],
 					replyTo: { email: email, name: name },
 					subject: `New message from ${name} via JaceStack AI`,
-					htmlContent: `<div style="font-family:sans-serif;color:#333;max-width:600px;padding:24px"><h2 style="margin:0 0 16px">New Project Brief</h2><p><strong>Name:</strong> ${name}</p><p><strong>Email:</strong> <a href="mailto:${email}">${email}</a></p><hr style="border:none;border-top:1px solid #eee;margin:20px 0"/><p><strong>Project Description:</strong></p><p style="line-height:1.7;white-space:pre-wrap">${projectDescription.replace(/\n/g,'<br/>')}</p><p><strong>Budget / Timeline:</strong> ${sanitize(form.budgetTimeline) || 'Not specified'}</p></div>`,
+					htmlContent: `<div style="font-family:sans-serif;color:#333;max-width:600px;padding:24px"><h2 style="margin:0 0 16px">New Project Brief</h2><p><strong>Name:</strong> ${name}</p><p><strong>Email:</strong> <a href="mailto:${email}">${email}</a></p><hr style="border:none;border-top:1px solid #eee;margin:20px 0"/><p><strong>Message:</strong></p><p style="line-height:1.7;white-space:pre-wrap">${userMessage.replace(/\n/g,'<br/>')}</p><p><strong>Project Description:</strong></p><p style="line-height:1.7;white-space:pre-wrap">${projectDescription.replace(/\n/g,'<br/>')}</p><p><strong>Budget / Timeline:</strong> ${sanitize(form.budgetTimeline) || 'Not specified'}</p></div>`,
 				},
 				{
 					headers: {
@@ -50,7 +40,6 @@ const Contact = () => {
 					timeout: 10000,
 				}
 			);
-			setRateData({ count: rd.count + 1, ts: Date.now() });
 			setStatus('ok');
 			setForm({ name: '', email: '', message: '', projectDescription: '', budgetTimeline: '' });
 		} catch (err) {
@@ -110,13 +99,36 @@ const Contact = () => {
 							<div>
 								<label className="block text-sm text-gray-400 mb-3">Message</label>
 								<textarea
-									rows="6"
+									rows="4"
 									placeholder="Tell me about your project..."
 									value={form.message}
 									onChange={e => set('message', e.target.value)}
 									required
 									maxLength={2000}
 									className="w-full rounded-2xl border border-white/10 bg-black/30 px-5 py-4 outline-none focus:border-purple-500 transition resize-none text-white placeholder:text-gray-600 text-sm"
+								/>
+							</div>
+							<div>
+								<label className="block text-sm text-gray-400 mb-3">Project Description</label>
+								<textarea
+									rows="4"
+									placeholder="Describe your project..."
+									value={form.projectDescription}
+									onChange={e => set('projectDescription', e.target.value)}
+									required
+									maxLength={2000}
+									className="w-full rounded-2xl border border-white/10 bg-black/30 px-5 py-4 outline-none focus:border-purple-500 transition resize-none text-white placeholder:text-gray-600 text-sm"
+								/>
+							</div>
+							<div>
+								<label className="block text-sm text-gray-400 mb-3">Budget / Timeline</label>
+								<input
+									type="text"
+									placeholder="e.g., $5000, 2 weeks"
+									value={form.budgetTimeline}
+									onChange={e => set('budgetTimeline', e.target.value)}
+									maxLength={200}
+									className="w-full rounded-2xl border border-white/10 bg-black/30 px-5 py-4 outline-none focus:border-purple-500 transition text-white placeholder:text-gray-600 text-sm"
 								/>
 							</div>
 
@@ -128,11 +140,6 @@ const Contact = () => {
 							{status === 'err' && (
 								<p className="text-red-400 text-sm px-4 py-3 rounded-xl bg-red-500/10 border border-red-500/20">
 									Something went wrong. Email me directly at jacestack17@gmail.com
-								</p>
-							)}
-							{status === 'rate' && (
-								<p className="text-yellow-400 text-sm px-4 py-3 rounded-xl bg-yellow-500/10 border border-yellow-500/20">
-									Too many submissions. Please email me directly.
 								</p>
 							)}
 
