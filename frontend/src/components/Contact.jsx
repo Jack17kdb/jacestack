@@ -5,7 +5,7 @@ const BREVO_KEY = import.meta.env.VITE_BREVO_API_KEY;
 const FROM_EMAIL = import.meta.env.VITE_EMAIL_ADDRESS;
 
 const Contact = () => {
-	const [form, setForm] = useState({ name: '', email: '', message: '', projectDescription: '', budgetTimeline: '' });
+	const [form, setForm] = useState({ name: '', email: '', projectDescription: '', budgetTimeline: '' });
 	const [status, setStatus] = useState(null);
 	const set = (k, v) => setForm(f => ({ ...f, [k]: v }));
 
@@ -16,9 +16,8 @@ const Contact = () => {
 
 		const name = sanitize(form.name);
 		const email = sanitize(form.email);
-		const userMessage = sanitize(form.message);
 		const projectDescription = sanitize(form.projectDescription);
-		if (!name || !email || !userMessage || !projectDescription) return;
+		if (!name || !email || !projectDescription) return;
 		if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return;
 
 		setStatus('sending');
@@ -30,7 +29,7 @@ const Contact = () => {
 					to: [{ email: 'jacestack17@gmail.com', name: 'Jace' }],
 					replyTo: { email: email, name: name },
 					subject: `New message from ${name} via JaceStack AI`,
-					htmlContent: `<div style="font-family:sans-serif;color:#333;max-width:600px;padding:24px"><h2 style="margin:0 0 16px">New Project Brief</h2><p><strong>Name:</strong> ${name}</p><p><strong>Email:</strong> <a href="mailto:${email}">${email}</a></p><hr style="border:none;border-top:1px solid #eee;margin:20px 0"/><p><strong>Message:</strong></p><p style="line-height:1.7;white-space:pre-wrap">${userMessage.replace(/\n/g,'<br/>')}</p><p><strong>Project Description:</strong></p><p style="line-height:1.7;white-space:pre-wrap">${projectDescription.replace(/\n/g,'<br/>')}</p><p><strong>Budget / Timeline:</strong> ${sanitize(form.budgetTimeline) || 'Not specified'}</p></div>`,
+					htmlContent: `<div style="font-family:sans-serif;color:#333;max-width:600px;padding:24px"><h2 style="margin:0 0 16px">New Project Brief</h2><p><strong>Name:</strong> ${name}</p><p><strong>Email:</strong> <a href="mailto:${email}">${email}</a></p><hr style="border:none;border-top:1px solid #eee;margin:20px 0"/><p><strong>Project Description:</strong></p><p style="line-height:1.7;white-space:pre-wrap">${projectDescription.replace(/\n/g,'<br/>')}</p><p><strong>Budget / Timeline:</strong> ${sanitize(form.budgetTimeline) || 'Not specified'}</p></div>`,
 				},
 				{
 					headers: {
@@ -41,7 +40,7 @@ const Contact = () => {
 				}
 			);
 			setStatus('ok');
-			setForm({ name: '', email: '', message: '', projectDescription: '', budgetTimeline: '' });
+			setForm({ name: '', email: '', projectDescription: '', budgetTimeline: '' });
 		} catch (err) {
 			console.error(err?.response?.data || err.message);
 			setStatus('err');
@@ -97,21 +96,9 @@ const Contact = () => {
 								/>
 							</div>
 							<div>
-								<label className="block text-sm text-gray-400 mb-3">Message</label>
-								<textarea
-									rows="4"
-									placeholder="Tell me about your project..."
-									value={form.message}
-									onChange={e => set('message', e.target.value)}
-									required
-									maxLength={2000}
-									className="w-full rounded-2xl border border-white/10 bg-black/30 px-5 py-4 outline-none focus:border-purple-500 transition resize-none text-white placeholder:text-gray-600 text-sm"
-								/>
-							</div>
-							<div>
 								<label className="block text-sm text-gray-400 mb-3">Project Description</label>
 								<textarea
-									rows="4"
+									rows="6"
 									placeholder="Describe your project..."
 									value={form.projectDescription}
 									onChange={e => set('projectDescription', e.target.value)}
